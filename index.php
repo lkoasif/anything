@@ -21,7 +21,9 @@ $html_codes = file_get_contents($url);
  $card = new HTMLDocument($html_codes);
 
 $data_array=array();
-
+/**
+ * eruhg uo453ihgt u5gh wu5h45ughy5
+ */
 $k=0;
 foreach ($card->querySelectorAll('.img-fluid') as $a )
 {
