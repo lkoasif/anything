@@ -22,7 +22,7 @@ $html_codes = file_get_contents($url);
 
 $data_array=array();
 /**
- * eruhg uo453ihgt u5gh wu5h45ughy5
+ * eruhg uo453tghy we4 y465y ihgt u5gh wu5h45ughy5
  */
 $k=0;
 foreach ($card->querySelectorAll('.img-fluid') as $a )
