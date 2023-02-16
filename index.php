@@ -1,5 +1,5 @@
 <?php
-error_reporting(0);
+//error_reporting(0);
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -18,63 +18,37 @@ require './vendor/autoload.php';
 $url = "https://dailynewshighlights.com/sports";
 $html_codes = file_get_contents($url);
 //echo $html_codes;
- $card = new HTMLDocument($html_codes);
+$document = new HTMLDocument($html_codes);
 
-$data_array=array();
-/**
- * eruhg uo453tghy we4 y465y ihgt u5gh wu5h45ughy5
- */
-$k=0;
-foreach ($card->querySelectorAll('.img-fluid') as $a )
+$news_cards = $document->querySelectorAll('.card');
+echo"<pre>";
+//print_r($news_cards);
+foreach($news_cards as $card)
 {
-    $data_array[$k]['src']=trim($a->src);
- $k++;
+  $title = mysqli_real_escape_string($conn, $card->querySelector('.card-title')->innerText);
+  $img =mysqli_real_escape_string($conn, $card->querySelector('.img-fluid')->src);
+  $time = $card->querySelector('.time-stamp')->innerText;
+  $date = date('Y-m-d H:i:s',strtotime($time));
+
+   $sql="select * from image_title where title='$title' or image_url='$img'";
+   $result = mysqli_query($conn,$sql);
+   $row=mysqli_num_rows($result);
+   if($row>0){
+    echo "data already exist";
+
+   }else{
+
+
+    echo $sql="INSERT INTO image_title(website_url,image_url,title,post_date) VALUES ('$url', '$img','$title','$date')";
+    $query=mysqli_query($conn, $sql);
+    
+
+   }   
 }
-
-$j=0;
-foreach ($card->querySelectorAll('.card-title') as $h4)
- {
-    $data_array[$j]['title']=trim($h4->innerText);
-    $j++;
- }
-
-  echo "<pre>";
-  print_r($data_array);
-
-// $img =$card->querySelectorAll('.img-fluid')->src;
- //print_r($img);
- 
- //$title =$card->querySelectorAll(".card-title")->innerText;
-    //echo "\n $img:<br>" . $card->src;
-
-    foreach($data_array as $data_val){
-        $title=$data_val['title'];
-        $img=$data_val['src'];
-        $url=$data_val['title'];
-
-     $sql="select * from image_title where title='$title'";
-     $result = mysqli_query($conn, $sql);
-     //echo mysqli_num_rows($result);
-     if (mysqli_num_rows($result)==0) {
-           $date=date('Y-m-d h:i:s');
-     $sql="INSERT INTO image_title(website_url,image_url,title,post_date) VALUES ('$url', '$img','$title','$date')";
-     if (mysqli_query($conn, $sql)) {
-
-     echo "inserted record";
-
-      }
-     }else{
-    echo "already exsit";
-    }
-}
+exit;
 
 
-  
-
-
-      ?>
-
-
+?>
 
 
 
